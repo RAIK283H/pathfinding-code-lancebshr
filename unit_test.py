@@ -11,6 +11,7 @@ class TestPathFinding(unittest.TestCase):
         self.assertTrue('TEST'.isupper())
         self.assertFalse('Test'.isupper())
 
+
     def test_floating_point_estimation(self):
         first_value = 0
         for x in range(1000):

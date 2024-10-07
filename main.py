@@ -23,6 +23,8 @@ player_layer = pyglet.graphics.Group(order=6)
 text_display_area = pyglet.graphics.Group(order=20)
 button_display_area = pyglet.graphics.Group(order=21)
 
+#print(len(graph_data))
+
 # Set Game Data
 for graph in graph_data:
     if len(graph) >= 3:
