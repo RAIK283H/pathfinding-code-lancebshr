@@ -61,6 +61,9 @@ class Scoreboard:
                                    font_size=self.font_size, batch=batch, group=group, color=player[2][colors.TEXT_INDEX])
             self.player_path_display.append(
                 (path_label, player))
+        
+        self.winner_label = pyglet.text.Label('Winner : ', x= 1000, y=100,
+                                                        font_name='Arial', font_size=self.font_size, batch=batch, group=group)
             
 
     def update_elements_locations(self):
@@ -115,9 +118,25 @@ class Scoreboard:
                 if player_object.player_config_data == player_configuration_info:
                     display_element.text = "Excess Distance Traveled: " + str(max(0, int(player_object.distance_traveled-self.distance_to_exit)))
 
+    def update_winner(self):
+
+        
+        min_distance = math.inf
+        winner = None
+
+        for player in global_game_data.player_objects:
+            if player.player_config_data[0] != "Test":
+                if player.distance_traveled < min_distance:
+                    min_distance = player.distance_traveled
+                    winner = player
+
+        self.winner_label.text = f"Winner : {winner.player_config_data[0]}"
+        
+
     def update_scoreboard(self):
         self.update_elements_locations()
         self.update_paths()
         self.update_distance_to_exit()
         self.update_distance_traveled()
+        self.update_winner()
         self.update_nodes_touched()

@@ -15,12 +15,119 @@ def get_test_path():
     return graph_data.test_path[global_game_data.current_graph_index]
 
 def get_available_options(currIndex):
-    global_game_data.current_graph_index
-    return graph_data.graph_data[global_game_data.current_graph_index][currIndex][1]
+    graph = graph_data.graph_data[global_game_data.current_graph_index]
+    return graph[currIndex][1]
 
 def get_graph():
     currGraph = graph_data.graph_data[global_game_data.current_graph_index]
     return currGraph
+
+
+def get_dfs_path():
+    path1 = []
+    path2 = []
+    currIndex = 0
+    options = get_available_options(currIndex)
+    currTarget = global_game_data.target_node[global_game_data.current_graph_index]
+    endNode = len(get_graph()) - 1
+
+    #precondition assert statments
+    graph = get_graph()
+    assert len(graph) > 1
+    assert 0 <= currTarget < len(graph)
+    assert 0 <= endNode < len(graph)
+    
+    def dfs(end, start):
+        seen = set()
+        stack = [[start]]
+        
+        while stack:
+            path = stack.pop()
+            node = path[-1]
+
+            if node == end:
+                return path
+            
+            if node in seen:
+                continue
+
+            for option in get_available_options(node):
+                new = list(path)
+                new.append(option)
+                stack.append(new)
+
+            seen.add(node)
+
+        return None
+    
+    #finding target
+    path1 = dfs(currTarget, 0)
+
+    #finding end node
+    path2 = dfs(endNode, currTarget)
+
+    finalPath = path1 + path2[1:]
+
+    #postcondition assert statments
+    assert currTarget in finalPath 
+    assert finalPath[-1] == endNode
+    for i in range(len(finalPath) - 1):
+        assert finalPath[i + 1] in graph[finalPath[i]][1]
+    return finalPath
+
+
+
+def bfs(target, start):
+    curr = start
+    visited = set()
+    queue = []
+    path = []
+    queue.append(start)
+
+    while queue:
+        curr = queue.pop()
+        path.append(curr)
+        for node in get_available_options(curr):
+            if node not in visited:
+                if node == target:
+                    path.append(node)
+                    return path
+                visited.add(node)
+                queue.append(node)
+
+     
+
+def get_bfs_path():
+    path1 = []
+    path2 = []
+    currIndex = 0
+    options = get_available_options(currIndex)
+    currTarget = global_game_data.target_node[global_game_data.current_graph_index]
+    endNode = len(get_graph()) - 1
+    graph = get_graph()
+
+    #precondition assert statments
+    assert len(graph) > 1
+    assert 0 <= currTarget < len(graph)
+    assert 0 <= endNode < len(graph)
+
+    #finding target
+    path1 = bfs(currTarget, 0)
+
+    #finding end node
+    path2 = bfs(endNode, currTarget)
+
+    finalPath = path1 + path2[1:]
+    print(finalPath)
+    #postcondition assert statments
+    assert currTarget in finalPath 
+    assert finalPath[-1] == endNode
+    for i in range(len(finalPath) - 1):
+        assert finalPath[i + 1] in graph[finalPath[i]][1]
+    return finalPath
+
+
+
 
 def get_random_path():
     path = []
@@ -56,15 +163,6 @@ def get_random_path():
     assert path[-1] == endNode
 
     return path
-
-
-def get_dfs_path():
-    return [1,2]
-
-
-def get_bfs_path():
-    return [1,2]
-
 
 def get_dijkstra_path():
     return [1,2]
