@@ -119,11 +119,10 @@ class Scoreboard:
                     display_element.text = "Excess Distance Traveled: " + str(max(0, int(player_object.distance_traveled-self.distance_to_exit)))
 
     def update_winner(self):
-
         
         min_distance = math.inf
         winner = None
-
+        # Finds lowest distance travelled
         for player in global_game_data.player_objects:
             if player.player_config_data[0] != "Test":
                 if player.distance_traveled < min_distance:

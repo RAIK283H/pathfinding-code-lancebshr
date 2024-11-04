@@ -1,0 +1,21 @@
+import graph_data
+import permutation
+
+# graph = graph_data.graph_data[1]
+graph = [
+        [(0, 0), [1, 3]],         
+        [(200, 0), [0, 2]],         
+        [(200, -200), [1, 3]],      
+        [(0, -200), [0, 2]]]
+permuations = permutation.getPerm(graph)
+hcycles = permutation.find_hamiltonians(graph, permuations)
+print(hcycles)
+print("Permutations:")
+print(permuations)
+
+if len(hcycles) == 0:
+    print("No hamiltonians")
+else:  
+    print("Hamiltonians")
+    print(hcycles)
+

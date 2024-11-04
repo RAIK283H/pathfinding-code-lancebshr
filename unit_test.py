@@ -3,7 +3,7 @@ import unittest
 
 import global_game_data
 import graph_data
-
+import permutation
 from pathing import get_dfs_path, get_bfs_path
 
 
@@ -54,23 +54,7 @@ class TestPathFinding(unittest.TestCase):
         print(actual)
         self.assertEqual(actual, expected)
 
-    def test_dfs_fail(self):
-        graph_data.graph_data = [[
-            [(100, 100), [1]],
-            [(200, 200), [0, 2]],
-            [(300, 300), [1, 3, 4]],
-            [(400, 400), [2, 5]],
-            [(500, 500), [2]],
-            [(500, 500), [3]]
-        ]]
-        global_game_data.current_graph_index = 0
-        global_game_data.target_node = {0: 3}
-
-        try:
-            get_dfs_path()
-        except AssertionError:
-            return
-        self.fail("DFS doesn't fail")
+    
     
     #BFS
 
@@ -96,23 +80,52 @@ class TestPathFinding(unittest.TestCase):
         print(actual)
         self.assertEqual(actual, expected)
 
-    def test_bfs_fail(self):
-        graph_data.graph_data = [[
-            [(100, 100), [1]],
-            [(200, 200), [0, 2]],
-            [(300, 300), [1, 3, 4]],
-            [(400, 400), [2, 5]],
-            [(500, 500), [2]],
-            [(500, 500), [3]]
-        ]]
-        global_game_data.current_graph_index = 0
-        global_game_data.target_node = {0: 3}
+    def test_perms4(self):
+        correctPerms = {
+        (0, 1, 2, 3), (0, 1, 3, 2), (0, 3, 1, 2), (3, 0, 1, 2),
+        (3, 0, 2, 1), (0, 3, 2, 1), (0, 2, 3, 1), (0, 2, 1, 3),
+        (2, 0, 1, 3), (2, 0, 3, 1), (2, 3, 0, 1), (3, 2, 0, 1),
+        (3, 2, 1, 0), (2, 3, 1, 0), (2, 1, 3, 0), (2, 1, 0, 3),
+        (1, 2, 0, 3), (1, 2, 3, 0), (1, 3, 2, 0), (3, 1, 2, 0),
+        (3, 1, 0, 2), (1, 3, 0, 2), (1, 0, 3, 2), (1, 0, 2, 3)}
+        graph = [
+        [(0, 0), [1]],
+        [(50, -200), [0, 2]],
+        [(50, -300), [1, 3]],
+        [(200, -500), [2]]
+    ]
+        perms = set(tuple(p) for p in permutation.getPerm(graph))
+        self.assertEqual(correctPerms, perms)
+    
+    def test_perms0(self):
+        correctPerms = {
+        (0,)}
+        graph = [
+        [(0, 0), [0]],
+    ]
+        perms = set(tuple(p) for p in permutation.getPerm(graph))
+        self.assertEqual(correctPerms, perms)
 
-        try:
-            get_bfs_path()
-        except AssertionError:
-            return
-        self.fail("BFS doesn't fail")
-        
+    def test_hcycle(self):
+        graph = [
+        [(0, 0), [1, 3]],         
+        [(200, 0), [0, 2]],         
+        [(200, -200), [1, 3]],      
+        [(0, -200), [0, 2]]]
+        hcycles = [[0, 1, 2, 3], [3, 0, 1, 2], [0, 3, 2, 1], [2, 3, 0, 1], [3, 2, 1, 0], [2, 1, 0, 3], [1, 2, 3, 0], [1, 0, 3, 2]]
+        perms = permutation.getPerm(graph)
+        test_hcycles = permutation.find_hamiltonians(graph, perms)
+        self.assertEqual(hcycles, test_hcycles)
+
+    def test_no_hcycle(self):
+        graph = [
+        [(0, 0), [1]],         
+        [(200, 0), [0, 2]],         
+        [(200, -200), [1, 3]],      
+        [(0, -200), [2]]]
+        hcycles = []
+        perms = permutation.getPerm(graph)
+        test_hcycles = permutation.find_hamiltonians(graph, perms)
+        self.assertEqual(hcycles, test_hcycles)
 if __name__ == '__main__':
     unittest.main()

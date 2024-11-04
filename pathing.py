@@ -38,19 +38,23 @@ def get_dfs_path():
     assert 0 <= endNode < len(graph)
     
     def dfs(end, start):
+        #Seen nodes set to avoid revisiting
         seen = set()
         stack = [[start]]
         
         while stack:
+            #Select current node
             path = stack.pop()
             node = path[-1]
 
+            #If node is found, return path
             if node == end:
                 return path
             
             if node in seen:
                 continue
-
+            
+            #Get neighbors
             for option in get_available_options(node):
                 new = list(path)
                 new.append(option)
@@ -84,14 +88,19 @@ def bfs(target, start):
     path = []
     queue.append(start)
 
+    
     while queue:
+        #Selecting current node, adding to path
         curr = queue.pop()
         path.append(curr)
+
         for node in get_available_options(curr):
             if node not in visited:
+                #If final node is found
                 if node == target:
                     path.append(node)
                     return path
+                #Add node to be visited
                 visited.add(node)
                 queue.append(node)
 
@@ -118,7 +127,6 @@ def get_bfs_path():
     path2 = bfs(endNode, currTarget)
 
     finalPath = path1 + path2[1:]
-    print(finalPath)
     #postcondition assert statments
     assert currTarget in finalPath 
     assert finalPath[-1] == endNode
