@@ -4,7 +4,7 @@ import unittest
 import global_game_data
 import graph_data
 import permutation
-from pathing import get_dfs_path, get_bfs_path
+from pathing import get_dfs_path, get_bfs_path, get_dijkstra_path
 
 
 
@@ -51,7 +51,6 @@ class TestPathFinding(unittest.TestCase):
 
         actual = get_dfs_path()
         expected = [0, 1, 2, 3, 5]
-        print(actual)
         self.assertEqual(actual, expected)
 
     
@@ -77,7 +76,6 @@ class TestPathFinding(unittest.TestCase):
 
         actual = get_bfs_path()
         expected = [0, 1, 2, 3, 5]
-        print(actual)
         self.assertEqual(actual, expected)
 
     def test_perms4(self):
@@ -127,5 +125,39 @@ class TestPathFinding(unittest.TestCase):
         perms = permutation.getPerm(graph)
         test_hcycles = permutation.find_hamiltonians(graph, perms)
         self.assertEqual(hcycles, test_hcycles)
+
+    def test_djkstra1(self):
+        graph_data.graph_data = [[
+            [(100, 100), [1]],
+            [(200, 200), [0, 2]],
+            [(300, 300), [1, 3, 4]],
+            [(2000, 400), [2, 5]],
+            [(500, 500), [2]],
+            [(500, 500), [3]]
+        ]]
+        global_game_data.current_graph_index = 0
+        global_game_data.target_node = {0: 3}
+
+        actual = get_dijkstra_path()
+        expected = [1, 2, 3, 5]
+        self.assertEqual(actual, expected)
+
+    def test_djkstra1(self):
+        graph_data.graph_data = [[
+            [(50, 60), [2, 4]],
+            [(150, 160), [0, 3]],
+            [(250, 270), [1, 4, 5]],
+            [(1800, 300), [2, 4]],
+            [(400, 450), [0, 2]],
+            [(120, 130), [1, 3]]
+        ]]
+        global_game_data.current_graph_index = 0
+        global_game_data.target_node = {0: 3}
+
+        actual = get_dijkstra_path()
+        expected = [2, 1, 3, 2, 5]
+        print(actual)
+        self.assertEqual(actual, expected)
+
 if __name__ == '__main__':
     unittest.main()

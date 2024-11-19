@@ -94,7 +94,7 @@ def change_graph():
     graph.set_up_graph()
     pathing.set_current_graph_paths()
 
-
+ 
 if __name__ == '__main__':
     pyglet.clock.schedule_interval(update, 1 / 120.0)
     pyglet.app.run()

@@ -2,45 +2,11 @@ import graph_data
 import global_game_data
 
 
-# def getPerm(graph):
-#     #Take off last node
-#     n = len(graph)
-#     directions = [-1] * n
-#     permutation = list(range(n))
-#     permutations = [permutation[:]]
-    
-#     def find_mobile():
-#         mobile = -1
-#         index = -1
-#         for i in range(n):
-#             neighbor = i + directions[i]
-#             if 0 <= neighbor < n and permutation[i] > permutation[neighbor]:
-#                 if mobile == -1 or permutation[i] > permutation[index]:
-#                     mobile = permutation[i]
-#                     index = i
-#         return index
-
-#     index = find_mobile()
-#     while index != -1:
-
-#         neighbor = index + directions[index]
-
-#         directions[index], directions[neighbor] = directions[neighbor], directions[index]
-#         permutation[index], permutation[neighbor] = permutation[neighbor], permutation[index]
-#         index, neighbor = neighbor, index
-
-#         for i in range(n):
-#             if permutation[i] > permutation[index]:
-#                 directions[i] = -directions[i]
-
-#         permutations.append(permutation[:])
-#         index = find_mobile()
-#     return permutations
-
 def getPerm(graph):
-    #Take off last node
     n = len(graph)
+    #First perm
     permutation = list(range(n))
+    #Curr mobile
     mobile = permutation[n-1]
     all_permutations = [permutation[:]]
     directions = [-1] * n
@@ -50,6 +16,7 @@ def getPerm(graph):
 
         neighbor = mobile + directions[mobile]
 
+        #Swapping mobile
         directions[mobile], directions[neighbor] = directions[neighbor], directions[mobile]
         permutation[mobile], permutation[neighbor] = permutation[neighbor], permutation[mobile]
         mobile, neighbor = neighbor, mobile
@@ -81,13 +48,17 @@ def find_hamiltonians(graph, all_permutations):
     return hamiltonians
 
 def validate_hamiltonian(graph, permutation):
+    #Checks for 1 node per set
     if set(permutation) != set(range(len(graph))):
         return False
     
+
     for i in range(len(permutation) - 1):
+        #If following node is connected
         if permutation[i + 1] not in graph[permutation[i]][1]:
             return False
         
+        #If it connects back around
         if permutation[0] not in graph[permutation[-1]][1]:
             return False
         
