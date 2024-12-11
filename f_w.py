@@ -46,3 +46,26 @@ def makePath(parent, start, end):
         path.append(start)
 
     return path
+
+def main():
+    # test the function
+    adjacencyList = {
+            0: [(1, 2), (3, 9)],
+            1: [(2, 3)],
+            2: [(3, 1)],
+            3: [(0, 6)],
+        }
+    
+    start_node = 0
+    end_node = 3
+    matrix = createMatrix(adjacencyList)
+        
+    dist, parent = floydWarshall(matrix)
+
+   
+    path = makePath(parent, start_node, end_node)
+    
+    
+    print(f"The shortest path is {path} with a distance of {dist[start_node][end_node]}.")
+
+main()

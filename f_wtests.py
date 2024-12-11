@@ -11,21 +11,21 @@ class TestFloydMarshall(unittest.TestCase):
             3: [(0, 6)],
         }
 
-        # Assume createMatrix is defined to convert adjacency lists to matrices
+        # Create matrix from appropriate adjacency list
         matrix = createMatrix(adjacencyList)
         
         dist, parent = floydWarshall(matrix)
 
-        # Updated assertions based on new paths
-        assert dist[0][2] == 5, "Path from 0 to 2 should have cost 5"
-        assert dist[1][3] == 4, "Path from 1 to 3 should have cost 4"
-        assert dist[0][3] == 6, "Path from 0 to 3 should have cost 6"
+        # Assert correct distance
+        assert dist[0][2] == 5, "path should have distance of 5"
+        assert dist[1][3] == 4, "path should have distance of 4"
+        assert dist[0][3] == 6, "path should have distance of 6"
 
-        # Updated path check
+        # Check for correct path
         path = makePath(parent, 0, 3)
-        assert path == [0, 1, 2, 3], f"Path from 0 to 3 should be [0, 1, 2, 3], got {path}"
+        assert path == [0, 1, 2, 3], f"Path should be [0, 1, 2, 3], instead it was {path}"
         
-        print("All tests passed!")
+        print("Tests passed!")
 
 if __name__ == '__main__':
     unittest.main()
